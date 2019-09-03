@@ -1,10 +1,14 @@
 # PSL1GHT libs
 
+## bzip2
+
+## dbglogger
+
 
 ## tiny3D
 
 - [/tiny3d](tiny3d/)
-- __/samples__
+- /samples
    - [fireworks3D](samples/fireworks3D/)
    - [fonts](samples/fonts/)
    - [fonts_from_ttf](samples/fonts_from_ttf/)
@@ -18,10 +22,10 @@
 
 source from https://github.com/Estwald/PSDK3v2
 
-## PS3 soundlib
+## ps3soundlib
 
-* [/ps3soundlib](ps3soundlib/)
-* __/samples__
-  * [fireworks3D](samples/fireworks3D/)
+- [/ps3soundlib](ps3soundlib/)
+- /samples
+  - [fireworks3D](samples/fireworks3D/)
 
 source from https://github.com/Estwald/PSDK3v2
