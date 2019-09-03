@@ -1,0 +1,5 @@
+This is a stripped down version of bzip2-1.0.6 just containing the compression
+library libbz2. This is _NOT_ the original bzip2, but just a subset. The
+Makefile is KOS-specific. Various other non-essential files have been removed.
+For the full bzip2 distribution, go to http://www.bzip.org/ .
+
