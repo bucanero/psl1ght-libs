@@ -20,15 +20,15 @@ source from https://sourceforge.net/p/cadcdev/libbz2/
 
 - [/tiny3d](tiny3d/)
 - /samples
-   - [fireworks3D](samples/fireworks3D/)
-   - [fonts](samples/fonts/)
-   - [fonts_from_ttf](samples/fonts_from_ttf/)
-   - [spheres3D](samples/spheres3D/)
-   - [sprites2D](samples/sprites2D/)
-   - [surfaces](samples/surfaces/)
-   - [tiny3d_lists](samples/tiny3d_lists/)
-   - [userviewport](samples/userviewport/)
-   - [yuv](samples/yuv/)
+   - [fireworks3D](samples/tiny3d/fireworks3D/)
+   - [fonts](samples/tiny3d/fonts/)
+   - [fonts_from_ttf](samples/tiny3d/fonts_from_ttf/)
+   - [spheres3D](samples/tiny3d/spheres3D/)
+   - [sprites2D](samples/tiny3d/sprites2D/)
+   - [surfaces](samples/tiny3d/surfaces/)
+   - [tiny3d_lists](samples/tiny3d/tiny3d_lists/)
+   - [userviewport](samples/tiny3d/userviewport/)
+   - [yuv](samples/tiny3d/yuv/)
 
 
 source from https://github.com/Estwald/PSDK3v2
@@ -37,6 +37,6 @@ source from https://github.com/Estwald/PSDK3v2
 
 - [/ps3soundlib](ps3soundlib/)
 - /samples
-  - [fireworks3D](samples/fireworks3D/)
+  - [fireworks3D](samples/tiny3d/fireworks3D/)
 
 source from https://github.com/Estwald/PSDK3v2
