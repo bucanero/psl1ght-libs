@@ -9,6 +9,7 @@ For the full bzip2 distribution, go to http://www.bzip.org/
 
 - [/bzip2](bzip2/)
 
+source from https://sourceforge.net/p/cadcdev/libbz2/
 
 ## dbglogger
 
