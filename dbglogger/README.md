@@ -119,7 +119,7 @@ int dbglogger_screenshot(const char* filename, const unsigned short alpha);
 Example (PNG with alpha):
 `dbglogger_screenshot("/dev_hdd0/tmp/myscreen.png", 1);`
 
-### Save an automatic screenshot
+### Save a screenshot to hdd0/tmp
 
 A function to save a screenshot in PNG format, with a predefined file name. Supports alpha channel.
 The screenshot will be placed in `/dev_hdd0/tmp/screenshot_YYYY_MM_DD_HH_MM_SS.png`
