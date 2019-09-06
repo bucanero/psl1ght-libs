@@ -10,11 +10,39 @@ socat udp4-recv:30000,ip-add-membership=239.255.0.100:0.0.0.0 -
 
 
 
+## Build/Install
 
+Build the library with: `make`
 
+Install the library to your PSL1GHT setup with: `make install`
 
 
 ## Initialize methods
+
+
+
+### default initialization
+
+```C    
+int dbglogger_init(void);
+```
+
+### initialize with a string
+
+```C
+int dbglogger_init_str(const char* ini_str);
+```
+
+Example:
+`dbglogger_init_str("tcp:192.168.1.123:18194");`
+
+Other possible init strings:
+```
+"udp:239.255.0.100:30000"
+"file:/dev_hdd0/tmp/dbglogger.log"
+```
+
+### init by parameters
 
 ```C
 typedef enum {
@@ -25,22 +53,15 @@ typedef enum {
 } LOGGER_MODES;
 ```
 
-```C    
-int dbglogger_init(void);
-```
-
-```C
-int dbglogger_init_str(const char* ini_str);
-```
-
-
-`"udp:239.255.0.100:30000"`
-`"tcp:192.168.1.123:18194"`
-`"file:/dev_hdd0/tmp/dbglogger.log"`
-
 ```C
 int dbglogger_init_mode(const unsigned int log_mode, const char* dest, const u_short port);
 ```
+
+Example:
+`dbglogger_init_mode(TCP_LOGGER, "192.168.1.123", 18999);`
+
+
+### initialize with a text file
 
 ```C
 int dbglogger_init_file(const char* ini_file);
