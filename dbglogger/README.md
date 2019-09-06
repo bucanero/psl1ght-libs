@@ -1,8 +1,11 @@
 # dbglogger library
 
-By default the logger will send debug messages to UDP multicast address 239.255.0.100:30000. 
+A simple PS3 /PSL1GHT library that provides basic debug logging over the network (TCP/UDP) or to a local file.
+The library also includes additional helper functions to save screenshots in PNG and encode files in Base64.
 
-To receive them you can use socat on your PC:
+By default, the logger will send debug messages to UDP multicast address `239.255.0.100:30000`. 
+
+To receive them you can use [socat](http://www.dest-unreach.org/socat/) on your PC:
 
 ```
 socat udp4-recv:30000,ip-add-membership=239.255.0.100:0.0.0.0 -
@@ -19,15 +22,19 @@ Install the library to your PSL1GHT setup with: `make install`
 
 ## Initialize methods
 
+You need to initialize the library before you can send logs to the network or file.
 
+### Default initialization
 
-### default initialization
+The default init will send log messages to UDP multicast address `239.255.0.100:30000`.
 
 ```C    
 int dbglogger_init(void);
 ```
 
-### initialize with a string
+### Initialize with a string
+
+You can initialize the library with a custom string, to override the default init.
 
 ```C
 int dbglogger_init_str(const char* ini_str);
@@ -36,13 +43,15 @@ int dbglogger_init_str(const char* ini_str);
 Example:
 `dbglogger_init_str("tcp:192.168.1.123:18194");`
 
-Other possible init strings:
+More example init strings:
 ```
 "udp:239.255.0.100:30000"
 "file:/dev_hdd0/tmp/dbglogger.log"
 ```
 
-### init by parameters
+### Init by parameters
+
+You can also initialize the library with custom parameters, to override the default init.
 
 ```C
 typedef enum {
@@ -63,11 +72,18 @@ Example:
 
 ### initialize with a text file
 
+You can initialize the library with a custom string read from a text file, to override the default init.
+
 ```C
 int dbglogger_init_file(const char* ini_file);
 ```
 
+Example: `dbglogger_init_file("/dev_hdd0/tmp/mylogger.ini");`
+
+
 ## Shutdown methods
+
+
 
 ```C
 int dbglogger_stop(void);
