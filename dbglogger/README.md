@@ -5,7 +5,7 @@ The library also includes additional helper functions to save screenshots in PNG
 
 By default, the logger will send debug messages to UDP multicast address `239.255.0.100:30000`. 
 
-To receive them you can use [socat](http://www.dest-unreach.org/socat/) on your PC:
+To receive them you can use [socat](http://www.dest-unreach.org/socat/) or [netcat](http://netcat.sourceforge.net/) on your PC:
 
 ```
 socat udp4-recv:30000,ip-add-membership=239.255.0.100:0.0.0.0 -
