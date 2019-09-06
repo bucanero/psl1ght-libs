@@ -11,7 +11,9 @@ To receive them you can use [socat](http://www.dest-unreach.org/socat/) or [netc
 socat udp4-recv:30000,ip-add-membership=239.255.0.100:0.0.0.0 -
 ```
 
+## Sample app
 
+You can find a sample PSL1GHT app using the library [here](../samples/dbglogger/blitting).
 
 ## Build/Install
 
