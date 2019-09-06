@@ -70,7 +70,7 @@ Example:
 `dbglogger_init_mode(TCP_LOGGER, "192.168.1.123", 18999);`
 
 
-### initialize with a text file
+### Initialize with a text file
 
 You can initialize the library with a custom string read from a text file, to override the default init.
 
@@ -83,17 +83,22 @@ Example: `dbglogger_init_file("/dev_hdd0/tmp/mylogger.ini");`
 
 ## Logging methods
 
-// function to print with format string similar to printf
+### printf
+
+A function to print using a format string similar to `printf()`
+
 ```C
 void dbglogger_printf(const char* fmt, ...);
 ```
 
-// function that prints "[timestamp] log \n" similar to printf
+### log
+
+A function to print using a format string, with a timestamp and carriage return. e.g. `[YYYY-MM-DD HH:MM:SS] my log \n` similar to `printf()`
 ```C
 void dbglogger_log(const char* fmt, ...);
 ```
 
-## Shutdown methods
+## Shutdown method
 
 If you no longer need to keep the network open for logging, you can shutdown the logger.
 
@@ -106,14 +111,19 @@ int dbglogger_stop(void);
 
 ### Save a screenshot
 
-// screenshot method
+A function to save a screenshot in PNG format. Supports alpha channel.
 ```C
 int dbglogger_screenshot(const char* filename, const unsigned short alpha);
 ```
 
+Example (PNG with alpha):
+`dbglogger_screenshot("/dev_hdd0/tmp/myscreen.png", 1);`
+
 ### Save an automatic screenshot
 
-// screenshot will be placed in /dev_hdd0/tmp/screenshot_YYYY_MM_DD_HH_MM_SS.png 
+A function to save a screenshot in PNG format, with a predefined file name. Supports alpha channel.
+The screenshot will be placed in `/dev_hdd0/tmp/screenshot_YYYY_MM_DD_HH_MM_SS.png`
+
 ```C
 int dbglogger_screenshot_tmp(const unsigned short alpha);
 ```
