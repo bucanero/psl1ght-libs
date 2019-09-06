@@ -14,6 +14,8 @@ source from https://sourceforge.net/p/cadcdev/libbz2/
 ## dbglogger
 
 - [/dbglogger](dbglogger/)
+- /samples
+   - [blitting](samples/dbglogger/blitting/)
 
 
 ## tiny3D
