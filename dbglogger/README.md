@@ -81,14 +81,6 @@ int dbglogger_init_file(const char* ini_file);
 Example: `dbglogger_init_file("/dev_hdd0/tmp/mylogger.ini");`
 
 
-## Shutdown methods
-
-
-
-```C
-int dbglogger_stop(void);
-```
-
 ## Logging methods
 
 // function to print with format string similar to printf
@@ -101,14 +93,27 @@ void dbglogger_printf(const char* fmt, ...);
 void dbglogger_log(const char* fmt, ...);
 ```
 
+## Shutdown methods
+
+If you no longer need to keep the network open for logging, you can shutdown the logger.
+
+```C
+int dbglogger_stop(void);
+```
+
+
 ## Screenshot methods
+
+### Save a screenshot
 
 // screenshot method
 ```C
 int dbglogger_screenshot(const char* filename, const unsigned short alpha);
 ```
 
-// screenshot will be placed in /dev_hdd0/tmp/screenshot_YYYY_MM_DD_HH_MM_SS.bmp 
+### Save an automatic screenshot
+
+// screenshot will be placed in /dev_hdd0/tmp/screenshot_YYYY_MM_DD_HH_MM_SS.png 
 ```C
 int dbglogger_screenshot_tmp(const unsigned short alpha);
 ```
