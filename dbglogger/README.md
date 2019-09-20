@@ -139,7 +139,7 @@ typedef enum {
 } B64ENC_MODES;
 ```
 
-// base64/uuencoding method
+A helper method to encode a binary file in Base64 or UUEncode and send it thru the initialized logger method (e.g., TCP, UDP or file)
 ```C
 int dbglogger_uuencode(const char* filename, const unsigned short table);
 ```
