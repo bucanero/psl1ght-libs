@@ -3,7 +3,7 @@ ifeq ($(strip $(PSL1GHT)),)
 $(error "PSL1GHT must be set in the environment.")
 endif
 
-PREFIX		:= spu-
+PREFIX		:= $(PSL1GHT)/spu/bin/spu-
 
 ########################################################
 OBJCOPY		:=	$(PREFIX)objcopy
@@ -12,7 +12,7 @@ AS			:=	$(PREFIX)gcc
 CC			:=	$(PREFIX)gcc
 CXX			:=	$(PREFIX)g++
 STRIP		:=	$(PREFIX)strip
-RAW2H		:=	$(PS3DEV)/bin/raw2h
+RAW2H		:=	$(PSL1GHT)/bin/raw2h
 
 ifeq ($(findstring $(PREFIX),$(LD)),)
 LD			:=	$(CC)
@@ -59,7 +59,7 @@ INCLUDE		:=	include
 DATA		:=	data
 LIBS		:=	-lc
 
-PORTLIBS    := $(PS3DEV)/portlibs/ppu
+PORTLIBS    := $(PSL1GHT)/portlibs/ppu
 
 CFLAGS		:=	-g -O2 -Wall --std=gnu99
 CXXFLAGS	:=	-g -O2 -Wall
@@ -93,9 +93,9 @@ $(BUILD):
 	@[ -d $@ ] || mkdir -p $@
 	@make --no-print-directory -C $(BUILD) -f $(CURDIR)/Makefile
 	@[ -d lib ] || mkdir -p lib
-	@raw2h$(POSTFIX) $(TARGET).elf lib/$(TARGET).bin.h lib/$(TARGET).S $(TARGET)_bin
-	@ppu-as -mcell lib/$(TARGET).S -o lib/$(TARGET).o
-	@ppu-ar -rcs $(TARGET).bin.a lib/$(TARGET).o
+	@$(RAW2H) $(TARGET).elf lib/$(TARGET).bin.h lib/$(TARGET).S $(TARGET)_bin
+	@$(PSL1GHT)/ppu/bin/ppu-as -mcell lib/$(TARGET).S -o lib/$(TARGET).o
+	@$(PSL1GHT)/ppu/bin/ppu-ar -rcs $(TARGET).bin.a lib/$(TARGET).o
 
 install: $(OUTPUT).elf
 	
