@@ -23,7 +23,7 @@
 * game screenshot
 *
 ***********************************************************************/
-int dbglogger_screenshot(const char *path, const unsigned short alpha)
+int dbglogger_screenshot(const char *path, const unsigned char alpha)
 {
     uint32_t offset = 0, pitch = 0;
     FILE *fd = NULL;
@@ -54,7 +54,7 @@ int dbglogger_screenshot(const char *path, const unsigned short alpha)
 }
 
 
-int dbglogger_screenshot_tmp(const unsigned short alpha) {
+int dbglogger_screenshot_tmp(const unsigned char alpha) {
     char sfile[64];
     struct tm t = *gmtime(&(time_t){time(NULL)});
 

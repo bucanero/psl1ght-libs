@@ -40,7 +40,7 @@ typedef enum {
     
 int dbglogger_init(void);
 int dbglogger_init_str(const char* ini_str);
-int dbglogger_init_mode(const unsigned int log_mode, const char* dest, const u_short port);
+int dbglogger_init_mode(const unsigned char log_mode, const char* dest, const unsigned short port);
 int dbglogger_init_file(const char* ini_file);
 
 int dbglogger_stop(void);
@@ -52,13 +52,13 @@ void dbglogger_printf(const char* fmt, ...);
 void dbglogger_log(const char* fmt, ...);
 
 // screenshot method
-int dbglogger_screenshot(const char* filename, const unsigned short alpha);
+int dbglogger_screenshot(const char* filename, const unsigned char alpha);
 
 // screenshot will be placed in /dev_hdd0/tmp/screenshot_YYYY_MM_DD_HH_MM_SS.bmp 
-int dbglogger_screenshot_tmp(const unsigned short alpha);
+int dbglogger_screenshot_tmp(const unsigned char alpha);
 
 // base64/uuencoding method
-int dbglogger_uuencode(const char* filename, const unsigned short table);
+int dbglogger_uuencode(const char* filename, const unsigned char table);
 
 
 #ifdef __cplusplus

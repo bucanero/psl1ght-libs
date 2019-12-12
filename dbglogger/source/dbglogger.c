@@ -85,7 +85,7 @@ static void uuencode(const unsigned char *s, const char *store, const int length
 	*p = '\0';
 }
 
-int dbglogger_uuencode(const char *filename, const unsigned short encode)
+int dbglogger_uuencode(const char *filename, const unsigned char encode)
 {
 	FILE *src_stream;
 	size_t size;
@@ -126,7 +126,7 @@ int dbglogger_uuencode(const char *filename, const unsigned short encode)
 }
 
 
-void networkInit(const char* dbglog_ip, const u_short dbglog_port) {
+void networkInit(const char* dbglog_ip, const unsigned short dbglog_port) {
     struct sockaddr_in stSockAddr;
     
     memset(&stSockAddr, 0, sizeof(stSockAddr));
@@ -162,41 +162,41 @@ void fileLog(const char* str) {
 }
 
 void dbglogger_printf(const char* fmt, ...) {
-if (loggerMode) {
-    char buffer[0x800];
-    va_list arg;
-    va_start(arg, fmt);
-    vsnprintf(buffer, sizeof(buffer), fmt, arg);
-    va_end(arg);
+	if (loggerMode) {
+    	char buffer[0x800];
+    	va_list arg;
+    	va_start(arg, fmt);
+    	vsnprintf(buffer, sizeof(buffer), fmt, arg);
+    	va_end(arg);
     
-    switch (loggerMode) {
-        case UDP_LOGGER:
-        case TCP_LOGGER:
-            netSend(socketFD, buffer, strlen(buffer), 0);
-            break;
-        case FILE_LOGGER:
-            fileLog(buffer);
-            break;
-    }
-   }
+    	switch (loggerMode) {
+        	case UDP_LOGGER:
+        	case TCP_LOGGER:
+            	netSend(socketFD, buffer, strlen(buffer), 0);
+            	break;
+        	case FILE_LOGGER:
+            	fileLog(buffer);
+            	break;
+    	}
+	}
 }
 
 void dbglogger_log(const char* fmt, ...) {
-if (loggerMode) {
-    char buffer[0x800];
+	if (loggerMode) {
+    	char buffer[0x800];
 
-    va_list arg;
-    va_start(arg, fmt);
-    vsnprintf(buffer, sizeof(buffer), fmt, arg);
-    va_end(arg);
+    	va_list arg;
+    	va_start(arg, fmt);
+    	vsnprintf(buffer, sizeof(buffer), fmt, arg);
+    	va_end(arg);
     
-    struct tm t = *gmtime(&(time_t){time(NULL)});
+    	struct tm t = *gmtime(&(time_t){time(NULL)});
     
-    dbglogger_printf("[%d-%02d-%02d %02d:%02d:%02d] %s\n", t.tm_year+1900, t.tm_mon+1, t.tm_mday, t.tm_hour, t.tm_min, t.tm_sec, buffer);
-   }
+    	dbglogger_printf("[%d-%02d-%02d %02d:%02d:%02d] %s\n", t.tm_year+1900, t.tm_mon+1, t.tm_mday, t.tm_hour, t.tm_min, t.tm_sec, buffer);
+	}
 }
 
-int dbglogger_init_mode(const unsigned int log_mode, const char* dest, const u_short port) {
+int dbglogger_init_mode(const unsigned char log_mode, const char* dest, const unsigned short port) {
     loggerMode = log_mode;
     switch (log_mode) {
         case UDP_LOGGER:
@@ -212,8 +212,7 @@ int dbglogger_init_mode(const unsigned int log_mode, const char* dest, const u_s
             dbglogger_log("------ TCP (%s:%d) network debug logger initialized -----", dest, port);
             break;
         case FILE_LOGGER:
-        	loggerMode = logFileInit(dest);
-            if (loggerMode)
+            if (logFileInit(dest))
             	dbglogger_log("----- File (%s) debug logger initialized -----", dest) ;
             break;
         default:
