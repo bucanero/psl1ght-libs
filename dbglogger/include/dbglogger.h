@@ -7,8 +7,6 @@
 #ifndef LIBDEBUGLOG_H
 #define LIBDEBUGLOG_H
 
-//#include <tiny3d.h>
-
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -32,12 +30,7 @@ typedef enum {
 	FILE_LOGGER	
 } LOGGER_MODES;
 
-typedef enum {
-	ENCODE_BASE64,
-	ENCODE_UUENCODE
-} B64ENC_MODES;
 
-    
 int dbglogger_init(void);
 int dbglogger_init_str(const char* ini_str);
 int dbglogger_init_mode(const unsigned char log_mode, const char* dest, const unsigned short port);
@@ -51,14 +44,17 @@ void dbglogger_printf(const char* fmt, ...);
 // function that prints "[timestamp] log \n" similar to printf
 void dbglogger_log(const char* fmt, ...);
 
+// starts a thread that terminates the process if the file exists
+int dbglogger_failsafe(const char* fpath);
+
 // screenshot method
 int dbglogger_screenshot(const char* filename, const unsigned char alpha);
 
 // screenshot will be placed in /dev_hdd0/tmp/screenshot_YYYY_MM_DD_HH_MM_SS.bmp 
 int dbglogger_screenshot_tmp(const unsigned char alpha);
 
-// base64/uuencoding method
-int dbglogger_uuencode(const char* filename, const unsigned char table);
+// base64 file encoding method
+int dbglogger_b64encode(const char* filename);
 
 
 #ifdef __cplusplus

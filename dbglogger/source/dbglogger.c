@@ -32,6 +32,11 @@ TCP
 
 #include <net/net.h>
 #include <netinet/in.h>
+#include <http/util.h>
+#include <sys/file.h>
+#include <sys/stat.h>
+#include <sys/thread.h>
+#include <lv2/process.h>
 
 #include <time.h>
 
@@ -45,47 +50,7 @@ static char logFile[256];
 #define B64_SRC_BUF_SIZE	45  // This *MUST* be a multiple of 3
 #define B64_DST_BUF_SIZE    4 * ((B64_SRC_BUF_SIZE + 2) / 3)
 
-static const char encode_table[2][65] = {
-	"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=",
-	"`!\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`"};
-
-/*
- *  Copyright (C) 2000 by Glenn McGrath
- *
- *  based on the function base64_encode from http.c in wget v1.6
- *  Copyright (C) 1995, 1996, 1997, 1998, 2000 Free Software Foundation, Inc.
- *
- * Encode the string S of length LENGTH to base64 format and place it
- * to STORE.  STORE will be 0-terminated, and must point to a writable
- * buffer of at least 1+BASE64_LENGTH(length) bytes.
- * where BASE64_LENGTH(len) = (4 * ((LENGTH + 2) / 3))
- */
-static void uuencode(const unsigned char *s, const char *store, const int length, const unsigned int encode)
-{
-	int i;
-	const char *tbl = encode_table[encode];
-	unsigned char *p = (unsigned char *)store;
-
-	/* Transform the 3x8 bits to 4x6 bits, as required by base64.  */
-	for (i = 0; i < length; i += 3) {
-		*p++ = tbl[s[0] >> 2];
-		*p++ = tbl[((s[0] & 0x03) << 4) + (s[1] >> 4)];
-		*p++ = tbl[((s[1] & 0x0f) << 2) + (s[2] >> 6)];
-		*p++ = tbl[s[2] & 0x3f];
-		s += 3;
-	}
-	/* Pad the result if necessary...  */
-	if (i == length + 1) {
-		*(p - 1) = tbl[64];
-	}
-	else if (i == length + 2) {
-		*(p - 1) = *(p - 2) = tbl[64];
-	}
-	/* ...and zero-terminate it.  */
-	*p = '\0';
-}
-
-int dbglogger_uuencode(const char *filename, const unsigned char encode)
+int dbglogger_b64encode(const char *filename)
 {
 	FILE *src_stream;
 	size_t size;
@@ -97,27 +62,21 @@ int dbglogger_uuencode(const char *filename, const unsigned char encode)
         return(0);
     }
     src_buf = malloc(B64_SRC_BUF_SIZE + 1);
-    dst_buf = malloc(B64_DST_BUF_SIZE + 1);
+    dst_buf = calloc(1, B64_DST_BUF_SIZE + 1);
 
-	dbglogger_printf("begin%s %o %s", encode == ENCODE_UUENCODE ? "" : "-base64", 0644, strrchr(filename, '/')+1);
+	dbglogger_printf("begin%s %o %s", "-base64", 0644, strrchr(filename, '/')+1);
 	while ((size = fread(src_buf, 1, B64_SRC_BUF_SIZE, src_stream)) > 0) {
 		if (size != B64_SRC_BUF_SIZE) {
 			/* pad with 0s so we can just encode extra bits */
 			memset(&src_buf[size], 0, B64_SRC_BUF_SIZE - size);
+			memset(dst_buf, 0, B64_DST_BUF_SIZE + 1);
 		}
 		/* Encode the buffer we just read in */
-		uuencode(src_buf, dst_buf, size, encode);
+		httpUtilBase64Encoder(dst_buf, src_buf, size);
 
-        switch (encode) {
-            case ENCODE_BASE64:
-                dbglogger_printf("\n%s", dst_buf);
-                break;
-            case ENCODE_UUENCODE:
-		        dbglogger_printf("\n%c%s", encode_table[encode][size], dst_buf);
-		        break;
-		}
+        dbglogger_printf("\n%s", dst_buf);
 	}
-	dbglogger_printf(encode == ENCODE_UUENCODE ? "\n`\nend\n" : "\n====\n");
+	dbglogger_printf("\n====\n");
 
     free(src_buf);
     free(dst_buf);
@@ -125,6 +84,55 @@ int dbglogger_uuencode(const char *filename, const unsigned char encode)
 	return(1);
 }
 
+// check if we receive a connection and kill the process
+void debug_netkill_thread(void *port)
+{
+	struct sockaddr_in sa;
+	memset(&sa, 0, sizeof(sa));
+	
+	sa.sin_family = AF_INET;
+	sa.sin_port = htons(strtoul(port, NULL, 0));
+	sa.sin_addr.s_addr = htonl(INADDR_ANY);
+	
+	int list_s = socket(PF_INET, SOCK_STREAM, IPPROTO_TCP);
+	
+	if ((bind(list_s, (struct sockaddr *)&sa, sizeof(sa)) == -1) || (listen(list_s, 4) == -1))
+	{
+		return;
+	}
+	
+	while(accept(list_s, NULL, NULL) <= 0)
+	{
+        usleep(1000*1000);
+	}
+	
+	shutdown(list_s, SHUT_RDWR);
+	dbglogger_stop();
+    sysProcessExit(1);
+}
+
+// check if the file exists and kill the process
+void debug_kill_thread(void* path)
+{
+    struct stat sb;
+
+    while ((stat((char*) path, &sb) != 0) || !S_ISREG(sb.st_mode))
+    {
+        usleep(1000*1000);
+    }
+
+    chmod((char*) path, 0777);
+    sysLv2FsUnlink((char*) path);
+	dbglogger_stop();
+    sysProcessExit(1);
+}
+
+int dbglogger_failsafe(const char* fpath)
+{
+    sys_ppu_thread_t tid;
+
+    return sysThreadCreate(&tid, (fpath[0] == '/' ? debug_kill_thread : debug_netkill_thread), (void*) fpath, 1000, 16*1024, THREAD_JOINABLE, "debug_wait");
+}
 
 void networkInit(const char* dbglog_ip, const unsigned short dbglog_port) {
     struct sockaddr_in stSockAddr;
@@ -140,7 +148,7 @@ void networkInit(const char* dbglog_ip, const unsigned short dbglog_port) {
 
 
 int logFileInit(const char* file_path) {
-    strncpy(logFile, file_path, 255);
+    snprintf(logFile, sizeof(logFile), "%s", file_path);
     FILE *fp = fopen(logFile, "a");
     
     if (fp) {
