@@ -48,7 +48,7 @@ static char logFile[256];
 
 #define DEBUG_PORT			18194
 #define B64_SRC_BUF_SIZE	45  // This *MUST* be a multiple of 3
-#define B64_DST_BUF_SIZE    4 * ((B64_SRC_BUF_SIZE + 2) / 3)
+#define B64_DST_BUF_SIZE    CELL_HTTP_UTIL_BASE64_ENC_BUF_SIZE(B64_SRC_BUF_SIZE)
 
 int dbglogger_b64encode(const char *filename)
 {
