@@ -7,7 +7,7 @@
 #include <rsx/gcm_sys.h>
 
 #include "dbglogger.h"
-#include "svpng.inc"
+#include "svpng.h"
 
 #define BASE          0xC0000000UL      // local memory base ea
 
