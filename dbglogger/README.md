@@ -136,5 +136,5 @@ int dbglogger_screenshot_tmp(const unsigned short alpha);
 
 A helper method to encode a binary file in Base64 and send it thru the initialized logger method (e.g., TCP, UDP or file)
 ```C
-int dbglogger_uuencode(const char* filename);
+int dbglogger_b64encode(const char* filename);
 ```
