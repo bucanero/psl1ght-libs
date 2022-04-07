@@ -37,7 +37,7 @@ source from https://github.com/Estwald/PSDK3v2
 
 ## ps3soundlib
 
-- [/ps3soundlib](ps3soundlib/)
+- [/ps3soundlib](https://github.com/wargio/ps3soundlib)
 - /samples
   - [fireworks3D](samples/tiny3d/fireworks3D/)
 
