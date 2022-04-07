@@ -13,7 +13,7 @@ source from https://sourceforge.net/p/cadcdev/libbz2/
 
 ## dbglogger
 
-- [/dbglogger](dbglogger/)
+- [/dbglogger](https://github.com/bucanero/dbglogger)
 - /samples
    - [blitting](samples/dbglogger/blitting/)
 
